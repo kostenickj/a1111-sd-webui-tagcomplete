@@ -32,16 +32,21 @@ class EmbeddingParser extends BaseTagParser {
         // Add final results
         let finalResults = [];
         tempResults.forEach(t => {
-            let lastDot = t[0].lastIndexOf(".") > -1 ? t[0].lastIndexOf(".") : t[0].length;
-            let lastSlash = t[0].lastIndexOf("/") > -1 ? t[0].lastIndexOf("/") : -1;
-            let name = t[0].trim().substring(lastSlash + 1, lastDot);
 
-            let result = new AutocompleteResult(name, ResultType.embedding)
-            result.sortKey = t[1];
-            result.meta = t[2] + " Embedding";
-            finalResults.push(result);
+            if(!t[0].endsWith('.preview'))
+            {
+                t[0] = t[0].replaceAll('\\', '/');
+                let lastDot = t[0].lastIndexOf(".") > -1 ? t[0].lastIndexOf(".") : t[0].length;
+                let lastSlash = t[0].lastIndexOf("/") > -1 ? t[0].lastIndexOf("/") : -1;
+                let name = t[0].trim().substring(lastSlash + 1, lastDot);
+    
+                let result = new AutocompleteResult(name, ResultType.embedding)
+                result.sortKey = t[1];
+                result.meta = t[2] + " Embedding";
+                finalResults.push(result);
+            }
+          
         });
-
         return finalResults;
     }
 }
